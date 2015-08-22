@@ -14,14 +14,19 @@ X = [ones(m, 1), data(:,1)]; % Add a column of ones to x
 theta = zeros(2, 1); % initialize fitting parameters
 
 % Some gradient descent settings
-iterations = 1500;
+iterations = 10;
 alpha = 0.001;
 
 % compute and display initial cost
-computeCost(X, y, theta)
+J = computeCost(X, y, theta);
+fprintf('Initial cost %f\n', J);
 
 % run gradient descent
-theta = gradientDescent(X, y, theta, alpha, iterations);
+[theta,J_history] = gradientDescent(X, y, theta, alpha, iterations);
+
+%  Fminunc needs more work
+%options = optimset('GradObj', 'on', 'MaxIter', 400);
+%[theta, J] = fminunc(@(t)(computeCost(X, y, theta)), theta, options);
 
 % print theta to screen
 fprintf('Theta found by gradient descent: ');
@@ -33,6 +38,14 @@ plot(X(:,2), X*theta, '-')
 legend('Training data', 'Linear regression')
 hold off % don't overlay any more plots on this figure
 
+% Visualize J
+%J_history = [ones(iterations, 1), J_history(:,1)];
+%for i = 2:iterations
+%  J_history(i,1) = i;
+%endfor
+%plot(J_history(:,1), J_history(:,2), 'rx', 'MarkerSize', 10); 
+%ylabel('J'); 
+%xlabel('Iteration'); 
 
 fprintf('Program paused. Press enter to continue.\n');
 pause;
